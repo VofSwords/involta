@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { debounce, includes } from 'lodash-es'
+import { useUserSettings } from '~/composables/use-user-settings'
 
 const router = useRouter()
 const route = useRoute()
 const setRouterQuery = (key: string, value: string | null) => {
   router.push(updateQueryString(route.fullPath, key, value))
 }
+
+const { feedLayout } = useUserSettings()
 
 const selectedProvider = computed(() => {
   const provider = parseParamToString(route.query.provider)
@@ -37,8 +40,6 @@ const updateSearch = () => {
 }
 
 watch(searchString, debounce(updateSearch, 300))
-
-const layout = ref<'cards' | 'list'>('cards')
 </script>
 
 <template>
@@ -92,16 +93,16 @@ const layout = ref<'cards' | 'list'>('cards')
           variant="subtle"
           color="neutral"
           active-color="primary"
-          :active="layout === 'list'"
-          @click="layout = 'list'"
+          :active="feedLayout === 'list'"
+          @click="feedLayout = 'list'"
         />
         <UButton
           icon="fluent:layout-cell-four-20-filled"
           variant="subtle"
           color="neutral"
           active-color="primary"
-          :active="layout === 'cards'"
-          @click="layout = 'cards'"
+          :active="feedLayout === 'cards'"
+          @click="feedLayout = 'cards'"
         />
       </UButtonGroup>
     </div>
