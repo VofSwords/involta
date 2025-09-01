@@ -1,51 +1,47 @@
 import type { GetFeed, NewsProvider } from './types'
 import { parseXML } from '../lib/xml-parser'
 
-export interface Enclosure {
+export type Enclosure = {
   '@_url': string
   '@_type': string
-  '@_length': string
 }
 
-export interface LentaRuNewsItem {
-  guid: string
-  author: string
+export type MosRuNewsItem = {
   title: string
-  link: string
   description?:
     | {
         __cdata: string
       }
     | string
+  link: string
   pubDate: string
-  enclosure: Enclosure
-  category: string
+  enclosure?: Enclosure | Enclosure[]
 }
 
-export interface LentaRuFeedRaw {
+export interface MosRuFeedRaw {
+  '?xml': {
+    '@_version': string
+    '@_encoding': string
+  }
   rss: {
     channel: {
-      language: string
       title: string
-      description: string
       link: string
-      image: {
-        url: string
-        title: string
-        link: string
-        widht: number
-        height: number
-      }
-      item: LentaRuNewsItem[]
+      description: string
+      item: MosRuNewsItem[]
     }
+    '@_xmlns:yandex': string
+    '@_xmlns:media': string
+    '@_xmlns:infographic': string
+    '@_version': string
   }
 }
 
 const getFeed: GetFeed = async () => {
   try {
-    const resp = await $fetch<ArrayBuffer>('https://lenta.ru/rss', { responseType: 'arrayBuffer' })
+    const resp = await $fetch<ArrayBuffer>('https://mos.ru/rss', { responseType: 'arrayBuffer' })
 
-    const parsed = parseXML(resp) as LentaRuFeedRaw
+    const parsed = parseXML(resp) as MosRuFeedRaw
 
     const items = parsed.rss.channel.item
     const result: NewsItem[] = []
@@ -76,8 +72,8 @@ const getFeed: GetFeed = async () => {
   }
 }
 
-const LentaRuProvider: NewsProvider = {
+const MosRuProvider: NewsProvider = {
   getFeed,
 }
 
-export { LentaRuProvider }
+export { MosRuProvider }

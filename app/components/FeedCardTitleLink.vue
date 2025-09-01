@@ -1,7 +1,14 @@
+<script setup lang="ts">
+const { url, text } = defineProps<{
+  url: string
+  text: string
+}>()
+</script>
+
 <template>
-  <ULink to="https://lenta.ru/" active>
+  <ULink :to="url" active>
     <h2 class="text-xl font-bold">
-      Первые земельные участки реализованы на специальных торгах для малого и среднего бизнеса
+      {{ text }}
     </h2>
   </ULink>
 </template>

@@ -1,32 +1,16 @@
 <script setup lang="ts">
-import { debounce, includes } from 'lodash-es'
+import { debounce, merge } from 'lodash-es'
 import { useUserSettings } from '~/composables/use-user-settings'
 
 const router = useRouter()
 const route = useRoute()
 const setRouterQuery = (key: string, value: string | null) => {
-  router.push(updateQueryString(route.fullPath, key, value))
+  router.push(merge({}, route, { params: { page: 1 }, query: { [key]: value } }))
 }
 
 const { feedLayout } = useUserSettings()
 
-const selectedProvider = computed(() => {
-  const provider = parseParamToString(route.query.provider)
-
-  if (!provider) return null
-
-  const isAllowed = includes(providersNames, provider)
-
-  if (!isAllowed) {
-    return null
-  }
-
-  return provider as NewsProviderName
-})
-
-const searchValue = computed(() => {
-  return parseParamToString(route.query.search, '')
-})
+const { searchValue, selectedProvider } = useFeed()
 
 const searchString = ref<string>(searchValue.value)
 
@@ -63,28 +47,28 @@ watch(searchString, debounce(updateSearch, 300))
     <div class="flex items-center justify-between gap-4 flex-wrap py-2">
       <UButtonGroup>
         <UButton
-          :to="updateQueryString(route.fullPath, 'provider', null)"
           label="Все"
           variant="subtle"
           color="neutral"
           active-color="primary"
           :active="selectedProvider === null"
+          @click="setRouterQuery('provider', null)"
         />
         <UButton
-          :to="updateQueryString(route.fullPath, 'provider', NewsProviderNamesEnum.mosRu)"
           variant="subtle"
           label="Mos.ru"
           color="neutral"
           active-color="primary"
           :active="selectedProvider === NewsProviderNamesEnum.mosRu"
+          @click="setRouterQuery('provider', NewsProviderNamesEnum.mosRu)"
         />
         <UButton
-          :to="updateQueryString(route.fullPath, 'provider', NewsProviderNamesEnum.lentaRu)"
           variant="subtle"
           label="Lenta.ru"
           color="neutral"
           active-color="primary"
           :active="selectedProvider === NewsProviderNamesEnum.lentaRu"
+          @click="setRouterQuery('provider', NewsProviderNamesEnum.lentaRu)"
         />
       </UButtonGroup>
       <UButtonGroup>
