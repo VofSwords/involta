@@ -65,8 +65,16 @@ onServerPrefetch(async () => {
       <div v-if="data.data.length === 0">No data</div>
       <div v-else-if="userSettingsStore.feedLayout === 'list'" class="flex flex-col gap-4">
         <UCard v-for="post in data.data" :key="post.link">
-          <div class="flex items-stretch gap-4 mb-6">
-            <div>
+          <div class="flex gap-4 mb-6 flex-wrap">
+            <div class="shrink-0 grow-0">
+              <div class="w-64 aspect-video">
+                <NuxtImg v-if="post.image" :src="post.image.src" />
+                <div v-else class="w-full h-full bg-slate-400 flex items-center justify-center">
+                  <UIcon name="mage:image-cross" size="60" />
+                </div>
+              </div>
+            </div>
+            <div class="shrink grow basis-64">
               <FeedCardTitleLink :url="post.link" :text="post.title" />
               <p>
                 {{ post.description }}
@@ -79,10 +87,16 @@ onServerPrefetch(async () => {
       <div v-else class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <UCard v-for="post in data.data" :key="post.link">
           <template #header>
-            <FeedCardTitleLink :url="post.link" :text="post.title" />
+            <div class="w-full aspect-video">
+              <NuxtImg v-if="post.image" :src="post.image.src" />
+              <div v-else class="w-full h-full bg-slate-400 flex items-center justify-center">
+                <UIcon name="mage:image-cross" size="60" />
+              </div>
+            </div>
           </template>
 
-          {{ post.description }}
+          <FeedCardTitleLink :url="post.link" :text="post.title" />
+          <p>{{ post.description }}</p>
 
           <template #footer>
             <div>

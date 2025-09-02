@@ -18,7 +18,7 @@ export interface LentaRuNewsItem {
       }
     | string
   pubDate: string
-  enclosure: Enclosure
+  enclosure?: Enclosure
   category: string
 }
 
@@ -52,7 +52,7 @@ const getFeed: GetFeed = async () => {
 
     // Transform data and filter invalid items
     for (const item of items) {
-      const { title, link, description } = item
+      const { title, link, description, enclosure } = item
       const pubDate = new Date(item.pubDate)
       if (!isValidDate(pubDate)) {
         continue
@@ -61,12 +61,21 @@ const getFeed: GetFeed = async () => {
       const descValue = description ? description : ''
       const descFinal = typeof descValue === 'string' ? descValue : descValue.__cdata ?? ''
 
-      result.push({
+      const res: NewsItem = {
         title,
         link,
         pubDate,
         description: descFinal,
-      })
+      }
+
+      if (enclosure) {
+        res.image = {
+          src: enclosure['@_url'],
+          type: enclosure['@_type'],
+        }
+      }
+
+      result.push(res)
     }
 
     return result

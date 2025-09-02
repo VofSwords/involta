@@ -5,6 +5,10 @@ export interface NewsItem {
   pubDate: Date
   link: string
   description: string
+  image?: {
+    src: string
+    type: string
+  }
 }
 
 export enum NewsProviderNamesEnum {

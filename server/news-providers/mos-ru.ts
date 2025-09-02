@@ -1,5 +1,6 @@
 import type { GetFeed, NewsProvider } from './types'
 import { parseXML } from '../lib/xml-parser'
+import { isArray } from 'lodash-es'
 
 export type Enclosure = {
   '@_url': string
@@ -48,21 +49,32 @@ const getFeed: GetFeed = async () => {
 
     // Transform data and filter invalid items
     for (const item of items) {
-      const { title, link, description } = item
+      const { title, link, description, enclosure } = item
       const pubDate = new Date(item.pubDate)
       if (!isValidDate(pubDate)) {
         continue
       }
+      const enclosureItem = isArray(enclosure)
+        ? enclosure.find((item) => item['@_type'].startsWith('image/'))
+        : enclosure
 
       const descValue = description ? description : ''
       const descFinal = typeof descValue === 'string' ? descValue : descValue.__cdata ?? ''
-
-      result.push({
+      const res: NewsItem = {
         title,
         link,
         pubDate,
         description: descFinal,
-      })
+      }
+
+      if (enclosureItem) {
+        res.image = {
+          src: enclosureItem['@_url'],
+          type: enclosureItem['@_type'],
+        }
+      }
+
+      result.push(res)
     }
 
     return result
