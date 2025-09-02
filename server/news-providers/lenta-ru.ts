@@ -66,6 +66,10 @@ const getFeed: GetFeed = async () => {
         link,
         pubDate,
         description: descFinal,
+        source: {
+          name: 'lenta.ru',
+          url: 'https://lenta.ru/',
+        },
       }
 
       if (enclosure) {

@@ -81,7 +81,7 @@ onServerPrefetch(async () => {
               </p>
             </div>
           </div>
-          <FeedCardFooter :url="post.link" :pub-date="post.pubDate" />
+          <FeedCardFooter :pub-date="post.pubDate" :source="post.source" />
         </UCard>
       </div>
       <div v-else class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -103,7 +103,7 @@ onServerPrefetch(async () => {
               <div>
                 <ULink :to="post.link" active> Подробнее </ULink>
               </div>
-              <FeedCardFooter :url="post.link" :pub-date="post.pubDate" />
+              <FeedCardFooter :pub-date="post.pubDate" :source="post.source" />
             </div>
           </template>
         </UCard>

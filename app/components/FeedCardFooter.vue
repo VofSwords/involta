@@ -1,7 +1,7 @@
 <script setup lang="ts">
-const { url, pubDate } = defineProps<{
-  url: string
+const { pubDate, source } = defineProps<{
   pubDate: string
+  source: NewsItem['source']
 }>()
 
 const date = computed(() => {
@@ -13,7 +13,7 @@ const date = computed(() => {
 
 <template>
   <div class="flex justify-between items-center">
-    <ULink :to="url"> source </ULink>
+    <ULink :to="source.url"> {{ source.name }} </ULink>
     <span>{{ date }}</span>
   </div>
 </template>

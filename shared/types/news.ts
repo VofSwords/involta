@@ -4,6 +4,10 @@ export interface NewsItem {
   title: string
   pubDate: Date
   link: string
+  source: {
+    name: string
+    url: string
+  }
   description: string
   image?: {
     src: string

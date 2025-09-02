@@ -65,6 +65,10 @@ const getFeed: GetFeed = async () => {
         link,
         pubDate,
         description: descFinal,
+        source: {
+          name: 'mos.ru',
+          url: 'https://www.mos.ru/',
+        },
       }
 
       if (enclosureItem) {
