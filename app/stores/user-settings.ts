@@ -31,13 +31,10 @@ const getSavedSettings = () => {
 }
 
 export const useUserSettingsStore = defineStore('user-settings', () => {
-  const isClient = useState('is-client', () => false)
   const feedLayout = useState('feed-layout', () => defaultSettings.feedLayout)
 
   const loadUserSettings = () => {
-    isClient.value = import.meta.client
-
-    if (isClient.value) {
+    if (import.meta.client) {
       const savedSettings = getSavedSettings()
 
       const settings = merge({}, defaultSettings, savedSettings)
@@ -49,14 +46,13 @@ export const useUserSettingsStore = defineStore('user-settings', () => {
   }
 
   watch(feedLayout, (newValue) => {
-    if (isClient.value) {
+    if (import.meta.client) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ feedLayout: newValue }))
     }
   })
 
   return {
     feedLayout,
-    isClient,
     loadUserSettings,
   }
 })
