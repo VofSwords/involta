@@ -62,7 +62,8 @@ onServerPrefetch(async () => {
     <FeedHeader />
     <main v-if="isLoading">Loading</main>
     <main v-else-if="data">
-      <div v-if="feedLayout === 'list'" class="flex flex-col gap-4">
+      <div v-if="data.data.length === 0">No data</div>
+      <div v-else-if="feedLayout === 'list'" class="flex flex-col gap-4">
         <UCard v-for="post in data.data" :key="post.link">
           <div class="flex items-stretch gap-4 mb-6">
             <div>
