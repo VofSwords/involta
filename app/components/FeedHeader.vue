@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { debounce, merge } from 'lodash-es'
-import { useUserSettings } from '~/composables/use-user-settings'
 
 const router = useRouter()
 const route = useRoute()
@@ -8,7 +7,7 @@ const setRouterQuery = (key: string, value: string | null) => {
   router.push(merge({}, route, { params: { page: 1 }, query: { [key]: value } }))
 }
 
-const { feedLayout } = useUserSettings()
+const userSettingsStore = useUserSettingsStore()
 
 const { searchValue, selectedProvider } = useFeed()
 
@@ -77,16 +76,16 @@ watch(searchString, debounce(updateSearch, 300))
           variant="subtle"
           color="neutral"
           active-color="primary"
-          :active="feedLayout === 'list'"
-          @click="feedLayout = 'list'"
+          :active="userSettingsStore.feedLayout === 'list'"
+          @click="userSettingsStore.feedLayout = 'list'"
         />
         <UButton
           icon="fluent:layout-cell-four-20-filled"
           variant="subtle"
           color="neutral"
           active-color="primary"
-          :active="feedLayout === 'cards'"
-          @click="feedLayout = 'cards'"
+          :active="userSettingsStore.feedLayout === 'cards'"
+          @click="userSettingsStore.feedLayout = 'cards'"
         />
       </UButtonGroup>
     </div>

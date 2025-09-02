@@ -30,7 +30,7 @@ const getSavedSettings = () => {
   }
 }
 
-export const useUserSettings = () => {
+export const useUserSettingsStore = defineStore('user-settings', () => {
   const isClient = useState('is-client', () => false)
   const feedLayout = useState('feed-layout', () => defaultSettings.feedLayout)
 
@@ -56,7 +56,7 @@ export const useUserSettings = () => {
 
   return {
     feedLayout,
-    isClient: computed(() => isClient.value),
+    isClient,
     loadUserSettings,
   }
-}
+})

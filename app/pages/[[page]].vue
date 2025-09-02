@@ -13,7 +13,7 @@ definePageMeta({
 const router = useRouter()
 const route = useRoute()
 
-const { feedLayout, loadUserSettings } = useUserSettings()
+const userSettingsStore = useUserSettingsStore()
 
 const { searchValue, selectedProvider, currentPage } = useFeed()
 
@@ -22,7 +22,7 @@ const handlePageChange = (newPage: number) => {
 }
 
 onMounted(() => {
-  loadUserSettings()
+  userSettingsStore.loadUserSettings()
 })
 
 const LIMIT = 4
@@ -63,7 +63,7 @@ onServerPrefetch(async () => {
     <main v-if="isLoading">Loading</main>
     <main v-else-if="data">
       <div v-if="data.data.length === 0">No data</div>
-      <div v-else-if="feedLayout === 'list'" class="flex flex-col gap-4">
+      <div v-else-if="userSettingsStore.feedLayout === 'list'" class="flex flex-col gap-4">
         <UCard v-for="post in data.data" :key="post.link">
           <div class="flex items-stretch gap-4 mb-6">
             <div>
